@@ -1,0 +1,14 @@
+FROM debian:bookworm-slim
+# mariadb 설치
+RUN	apt-get update -y && \
+	apt-get upgrade -y && \
+	apt-get -y install mariadb-server
+# 기존 변경 작업
+RUN	sed -i 's/^\(\s*bind-address\s*=\s*\).*/\10.0.0.0/' /etc/mysql/mariadb.conf.d/50-server.cnf
+
+# DB와 USER 생성
+RUN	service mysql start
+COPY	./tools/init_db.sh /
+
+CMD	["/init_db.sh"]
+

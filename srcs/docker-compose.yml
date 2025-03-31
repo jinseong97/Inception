@@ -1,0 +1,50 @@
+version: '3.5'
+
+volumes:
+  data: {}
+    # db:
+    #
+    # wordpress:
+
+networks:
+  web-service:
+    driver: bridge
+
+services:
+  mariadb:
+    image: debian:buster
+    restart: always
+    expose:
+      - "3306"
+    networks:
+      - web-service
+    env_file:
+      - .env
+    tty: true
+
+  nginx:
+    image: debian:buster
+    restart: always
+    ports:
+      - "443:443"
+    volumes:
+      - data:/var/www/html
+    networks:
+      - web-service
+    env_file:
+      - .env
+    tty: true
+
+  wordpress:
+    image: debian:buster
+    restart: always
+    volumes:
+      - data:/var/www/html
+    expose:
+      - "9000"
+    networks:
+      - web-service
+    env_file:
+      - .env
+    tty: true
+
