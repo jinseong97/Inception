@@ -12,3 +12,6 @@ fclean: clean
 	rm -r /home/jinsecho/data/db
 	rm -r /home/jinsecho/data/wp
 re:	clean all
+
+.PHONY:	all down clean fclean re
+
