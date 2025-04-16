@@ -1,19 +1,12 @@
 version: '3.5'
 
-volumes:
-  data: {}
-    # db:
-    #
-    # wordpress:
-
-networks:
-  web-service:
-    driver: bridge
-
 services:
   mariadb:
-    image: debian:buster
-    restart: always
+    container_name: mariadb
+    build: ./requirements/mariadb
+    restart: on-failure
+    volumes:
+      - db:/var/lib/mysql
     expose:
       - "3306"
     networks:
@@ -21,25 +14,25 @@ services:
     env_file:
       - .env
     tty: true
-
   nginx:
-    image: debian:buster
-    restart: always
+    container_name: nginx
+    build: ./requirements/nginx
+    restart: on-failure
     ports:
       - "443:443"
     volumes:
-      - data:/var/www/html
+      - wp:/var/www/html
     networks:
       - web-service
     env_file:
       - .env
     tty: true
-
   wordpress:
-    image: debian:buster
-    restart: always
+    container_name: wordpress
+    build: ./requirements/wordpress
+    restart: on-failure
     volumes:
-      - data:/var/www/html
+      - wp:/var/www/html
     expose:
       - "9000"
     networks:
@@ -48,3 +41,18 @@ services:
       - .env
     tty: true
 
+volumes:
+  db:
+    driver_opts:
+      type: "none"
+      o: bind
+      device: /home/jinsecho/data/db
+  wp:
+    driver_opts:
+      type: "none"
+      o: bind
+      device: /home/jinsecho/data/wp
+
+networks:
+  web-service:
+    driver: bridge
