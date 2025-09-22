@@ -1,14 +1,21 @@
-FROM	debian:bookworm-slim
+FROM debian:bookworm-slim
+
 # mariadb 설치
-RUN	apt-get update -y && \
-	apt-get upgrade -y && \
-	apt-get -y install mariadb-server
-# 기존 변경 작업
-RUN	sed -i 's/127.0.0.1/0.0.0.0/' /etc/mysql/mariadb.conf.d/50-server.cnf
+RUN apt-get update -y && \
+    apt-get upgrade -y && \
+    apt-get -y install mariadb-server
 
-# DB와 USER 생성
-COPY	./tools/init_db.sh /
-RUN	chmod +x /init_db.sh
+# 외부 접속 허용
+RUN sed -i 's/127.0.0.1/0.0.0.0/' /etc/mysql/mariadb.conf.d/50-server.cnf
 
-ENTRYPOINT	["/init_db.sh"]
-# CMD		["mysqld_safe"]
+COPY ./tools/init.sh /
+RUN chmod +x /init.sh
+
+RUN mkdir -p /var/run/mysqld && \
+	chown mysql:mysql /var/run/mysqld && \
+	chmod 755 /var/run/mysqld
+
+EXPOSE 3306
+
+ENTRYPOINT ["/init.sh"]
+CMD ["mysqld", "--user=mysql", "--init-file=/var/run/mysqld/init.sql"]

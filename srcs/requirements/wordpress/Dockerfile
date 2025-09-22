@@ -1,19 +1,18 @@
-FROM	debian:bookworm-slim
+FROM debian:bookworm-slim
 
-RUN	apt-get update -y && \
+RUN apt-get update -y && \
 	apt-get upgrade -y && \
 	apt-get -y install \
 	php \
 	php-fpm \
 	php-cli \
 	php-mysql \
-	curl \
-	sendmail
+	curl
 
-WORKDIR	/var/www/html
+WORKDIR /var/www/html
 
-COPY	./tools/script.sh /
-RUN	chmod +x /script.sh
+COPY ./tools/script.sh /
+RUN chmod +x /script.sh
 
-ENTRYPOINT	["/script.sh"]
-CMD		["/usr/sbin/php-fpm8.2", "-F"]
+ENTRYPOINT ["/script.sh"]
+CMD ["/usr/sbin/php-fpm8.2", "-F"]

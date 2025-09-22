@@ -1,4 +1,4 @@
-DC=docker-compose
+DC=docker compose
 DOCKER_COMPOSE_FILE=./srcs/docker-compose.yml
 
 all:
@@ -11,9 +11,10 @@ ps:
 	@$(DC) -f $(DOCKER_COMPOSE_FILE) ps
 clean:
 	@$(DC) -f $(DOCKER_COMPOSE_FILE) down -v
-fclean: clean
 	@rm -rf /home/jinsecho/data
-re:	fclean all
+fclean: clean
+	@docker system prune -a --volumes
+
+re:	clean all
 
 .PHONY:	all down clean fclean re
-

@@ -1,10 +1,8 @@
-version: '3.5'
-
 services:
   mariadb:
     container_name: mariadb
     build: ./requirements/mariadb
-    restart: on-failure
+    restart: always
     volumes:
       - db:/var/lib/mysql
     expose:
@@ -17,7 +15,7 @@ services:
   nginx:
     container_name: nginx
     build: ./requirements/nginx
-    restart: on-failure
+    restart: always
     ports:
       - "443:443"
     volumes:
@@ -30,7 +28,7 @@ services:
   wordpress:
     container_name: wordpress
     build: ./requirements/wordpress
-    restart: on-failure
+    restart: always
     volumes:
       - wp:/var/www/html
     expose:
