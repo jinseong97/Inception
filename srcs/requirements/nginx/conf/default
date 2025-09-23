@@ -6,11 +6,9 @@ server {
 	ssl_certificate /etc/ssl/certs/server.crt;
 	ssl_certificate_key /etc/ssl/private/server_pkey.pem;
 	
-	root /var/www/html;
-	
-	index index.php index.html index.htm;
-	
 	server_name DOMAIN_NAME www.DOMAIN_NAME;
+	root /var/www/html;
+	index index.php index.html index.htm;
 
 	location / {
 		try_files $uri $uri/ =404;
