@@ -10,7 +10,7 @@ RUN openssl req -x509 -nodes -days 365 \
 	-out /etc/ssl/certs/server.crt \
 	-subj "/C=KR/ST=Gyeongbuk/L=gyeongsan/O=42/OU=cadet/CN=jinsecho/"
 
-COPY ./tools/certs.sh /certs.sh
+COPY ./tools/certs.sh /
 RUN chmod +x /certs.sh
 
 COPY ./conf/default /etc/nginx/sites-available/default
